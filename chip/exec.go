@@ -43,7 +43,7 @@ func (c *Chip) DecodeAndExecute(o Operation) error {
 			idx++
 
 			for col := 0; col < 8 && col + x < w; col++ { // pix exists in scr
-				bit := (line >> col) & 0x1
+				bit := (line >> (7 - col)) & 0x1
 				old := c.Canvas.Get(x + col, y + row)
 				cur := bit ^ old
 
