@@ -2,6 +2,7 @@ package render
 
 import (
 	"image/color"
+	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -48,5 +49,15 @@ func (s *Canvas) Draw(screen *ebiten.Image) {
 		}
 	}
 
-	screen.DrawImage(s.image, nil)
+	sw := float64(screen.Bounds().Dx())
+	sh := float64(screen.Bounds().Dy())
+	scale := math.Min(sw / float64(w), sh / float64(h))
+	scw := float64(w) * scale
+	sch := float64(h) * scale
+
+	opts := &ebiten.DrawImageOptions{}
+	opts.GeoM.Scale(scale, scale)
+	opts.GeoM.Translate((sw - scw) / 2, (sh - sch) / 2)
+
+	screen.DrawImage(s.image, opts)
 }
