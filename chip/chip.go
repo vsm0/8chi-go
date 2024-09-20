@@ -10,9 +10,10 @@ import (
 type Chip struct {
 	Ram []uint8
 	Reg []uint8
-	Pc, Index uint8
+	Pc, Index uint16
+	DelayTimer, SoundTimer uint8
 	Stack adt.Stack[uint16]
-	Canvas render.Surface
+	Canvas *render.Canvas
 }
 
 func New() *Chip {

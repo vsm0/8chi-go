@@ -1,21 +1,20 @@
 package main
 
-import (
-	"github.com/vsm0/8chi-go/chip"
-	"github.com/vsm0/8chi-go/font"
-//	"github.com/vsm0/8chi-go/rom"
-
-	"math/rand"
-	"time"
-)
+import "github.com/hajimehoshi/ebiten/v2"
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
+	cfg := NewConfig()
+	g, err := NewGame(cfg)
+	if err != nil {
+		panic(err)
+	}
 
-	c := chip.New()
-	font.Load(c.Ram, 0x50, font.Default)
+	ebiten.SetWindowTitle("8Chi-Go Emulator")
+	ebiten.SetWindowSize(640, 480)
+	ebiten.SetWindowResizable(true)
+	ebiten.SetMaxTPS(cfg.Tps)
 
-	// rom.Load(c.Ram, 0x200, "game.rom")
-
-	// fetch, load and execute
+	if err := ebiten.RunGame(g); err != nil {
+		panic(err)
+	}
 }
