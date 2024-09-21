@@ -34,6 +34,16 @@ func NewGame(cfg *Config) (*Game, error) {
 
 	rand.Seed(cfg.Seed)
 
+	if cfg.QuirkShift {
+		c.Quirks.Set(chip.ShiftQuirk)
+	}
+	if cfg.QuirkJump {
+		c.Quirks.Set(chip.JumpQuirk)
+	}
+	if cfg.QuirkLoad {
+		c.Quirks.Set(chip.LoadQuirk)
+	}
+
 	return &Game{
 		Machine: c,
 		Frequency: cfg.Frequency / cfg.Tps,

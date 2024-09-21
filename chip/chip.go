@@ -14,6 +14,7 @@ type Chip struct {
 	DelayTimer, SoundTimer uint8
 	Stack adt.Stack[uint16]
 	Canvas *render.Canvas
+	Quirks Quirk
 }
 
 func New() *Chip {
