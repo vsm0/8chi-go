@@ -11,7 +11,7 @@ func H8xy6(c *chip.Chip, o chip.Operation) error {
 
 	c.Reg[0xf] = vx & 0x1
 
-	c.Reg[o.X()] >>= 1
+	c.Reg[o.X()] = vx >> 1
 
 	return nil
 }

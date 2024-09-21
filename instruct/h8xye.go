@@ -11,7 +11,7 @@ func H8xye(c *chip.Chip, o chip.Operation) error {
 
 	c.Reg[0xf] = vx >> 7
 
-	c.Reg[o.X()] <<= 1
+	c.Reg[o.X()] = vx << 1
 
 	return nil
 }
