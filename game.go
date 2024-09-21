@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/vsm0/8chi-go/chip"
 	"github.com/vsm0/8chi-go/font"
+	"github.com/vsm0/8chi-go/instruct"
 	"github.com/vsm0/8chi-go/rom"
 
 	"image/color"
@@ -57,7 +58,7 @@ func (g *Game) Update() error {
 			}
 		}
 
-		if err := g.Machine.Cycle(); err != nil {
+		if err := instruct.Cycle(g.Machine); err != nil {
 			return err
 		}
 	}
