@@ -13,7 +13,7 @@ type Config struct {
 	FontAddr uint16
 	Seed int64
 	Tps, Frequency, Cycles int
-	Limited bool
+	Limited, QuirkShift, QuirkJump, QuirkLoad bool
 }
 
 func NewConfig() *Config {
@@ -30,6 +30,10 @@ func NewConfig() *Config {
 	frequency := flag.Int("hz", 700, "cycle frequency / number of instructions per second")
 	cycles := flag.Int("c", 0, "number of cycles to run; unused if unlimited; see -l)")
 	limited := flag.Bool("l", false, "whether or not to run a limited number of cycles; see -c")
+	quirkShift := flag.Bool("qs", false, "whether or not to enable SHIFT quirk")
+	quirkJump := flag.Bool("qj", false, "whether or not to enable JUMP quirk")
+	quirkLoad := flag.Bool("ql", false, "whether or not to enable LOAD quirk")
+
 	usage := flag.Bool("h", false, "prints usable flags")
 
 	flag.Parse()
@@ -49,5 +53,8 @@ func NewConfig() *Config {
 		Frequency: *frequency,
 		Cycles: *cycles,
 		Limited: *limited,
+		QuirkShift: *quirkShift,
+		QuirkJump: *quirkJump,
+		QuirkLoad: *quirkLoad,
 	}
 }
