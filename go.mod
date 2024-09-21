@@ -1,12 +1,10 @@
 module github.com/vsm0/8chi-go
 
-go 1.21
-
-toolchain go1.23.1
+go 1.19
 
 require (
 	github.com/gopxl/pixel/v2 v2.3.0
-	github.com/vsm0/adt v0.0.0-20240920022903-cc286028c286
+	github.com/vsm0/adt v0.0.0-20240919145019-c73e8bdc4392
 )
 
 require (
