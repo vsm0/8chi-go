@@ -28,7 +28,7 @@ func NewConfig() *Config {
 	seed := flag.Int64("s", time.Now().UnixNano(), "seed for RNG")
 	tps := flag.Int("t", 60, "ticks per second for general simulation")
 	frequency := flag.Int("hz", 700, "cycle frequency / number of instructions per second")
-	cycles := flag.Int("c", 0, "number of cycles to run; unused if unlimited; see -l)")
+	cycles := flag.Int("c", 0, "number of cycles to run; unused if unlimited; see -l")
 	limited := flag.Bool("l", false, "whether or not to run a limited number of cycles; see -c")
 	quirkShift := flag.Bool("qs", false, "whether or not to enable SHIFT quirk")
 	quirkJump := flag.Bool("qj", false, "whether or not to enable JUMP quirk")

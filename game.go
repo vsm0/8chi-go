@@ -9,14 +9,14 @@ import (
 	"image/color"
 	"math/rand"
 
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/gopxl/pixel/v2/backends/opengl"
 )
 
 var backgroundColor = color.RGBA{0x1f, 0x1f, 0x1f, 0xff}
 
 type Game struct {
 	Machine *chip.Chip
-	Frequency, Cycles int
+	Tps, Frequency, Cycles int
 	Limited bool
 }
 
@@ -46,17 +46,14 @@ func NewGame(cfg *Config) (*Game, error) {
 
 	return &Game{
 		Machine: c,
+		Tps: cfg.Tps,
 		Frequency: cfg.Frequency / cfg.Tps,
 		Cycles: cfg.Cycles,
 		Limited: cfg.Limited,
 	}, nil
 }
 
-func (g *Game) Layout(w, h int) (int, int) {
-	return w, h
-}
-
-func (g *Game) Update() error {
+func (g *Game) Update(window *opengl.Window) error {
 	g.Machine.Countdown()
 
 	for i := 0; i < g.Frequency; i++ {
@@ -76,8 +73,8 @@ func (g *Game) Update() error {
 	return nil
 }
 
-func (g *Game) Draw(screen *ebiten.Image) {
-	screen.Fill(backgroundColor)
+func (g *Game) Draw(window *opengl.Window) {
+	window.Clear(backgroundColor)
 
-	g.Machine.Canvas.Draw(screen)
+	g.Machine.Canvas.Draw(window)
 }

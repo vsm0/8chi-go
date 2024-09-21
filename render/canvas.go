@@ -4,24 +4,39 @@ import (
 	"image/color"
 	"math"
 
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/gopxl/pixel/v2"
+	"github.com/gopxl/pixel/v2/backends/opengl"
 )
 
 type Canvas struct {
 	buffer []uint8
-	image *ebiten.Image
+	image *pixel.PictureData
+	sprite *pixel.Sprite
 }
 
 func NewCanvas(w, h int) *Canvas {
-	return &Canvas{
+	r := pixel.R(0, 0, float64(w), float64(h))
+	pd := pixel.MakePictureData(r)
+	spr := pixel.NewSprite(pd, r)
+
+	c := &Canvas{
 		buffer: make([]uint8, w * h),
-		image: ebiten.NewImage(w, h),
+		image: pd,
+		sprite: spr,
 	}
+
+	for x := 0; x < int(r.W()); x++ {
+		for y := 0; y < int(r.H()); y++ {
+			c.Set(x, y, 0)
+		}
+	}
+
+	return c
 }
 
 func (s *Canvas) Size() (int, int) {
 	b := s.image.Bounds()
-	return b.Dx(), b.Dy()
+	return int(b.W()), int(b.H())
 }
 
 func (s *Canvas) Set(x, y int, b uint8) {
@@ -34,30 +49,29 @@ func (s *Canvas) Get(x, y int) uint8 {
 	return s.buffer[x + y * w]
 }
 
-func (s *Canvas) Draw(screen *ebiten.Image) {
+func (s *Canvas) Draw(window *opengl.Window) {
 	w, h := s.Size()
 
-	colors := []color.Color{
-		color.Black,
-		color.White,
+	colors := []color.RGBA{
+		color.RGBA{A:0xff},
+		color.RGBA{0xff, 0xff, 0xff, 0xff},
 	}
 
 	for x := 0; x < w; x++ {
 		for y := 0; y < h; y++ {
-			b := s.buffer[x + y * w]
-			s.image.Set(x, y, colors[b])
+			i := x + y * w
+			b := s.buffer[i]
+			s.image.Pix[i] = colors[b]
 		}
 	}
 
-	sw := float64(screen.Bounds().Dx())
-	sh := float64(screen.Bounds().Dy())
+	sw := window.Bounds().W()
+	sh := window.Bounds().H()
 	scale := math.Min(sw / float64(w), sh / float64(h))
-	scw := float64(w) * scale
-	sch := float64(h) * scale
 
-	opts := &ebiten.DrawImageOptions{}
-	opts.GeoM.Scale(scale, scale)
-	opts.GeoM.Translate((sw - scw) / 2, (sh - sch) / 2)
+	pos := window.Bounds().Center()
+	mat := pixel.IM.Moved(pos)
+	mat = mat.ScaledXY(pos, pixel.V(scale, scale))
 
-	screen.DrawImage(s.image, opts)
+	s.sprite.Draw(window, mat)
 }
